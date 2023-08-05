@@ -1,5 +1,4 @@
 use num_bigint::BigInt;
-use std::str::FromStr;
 use structopt::StructOpt;
 
 
@@ -17,11 +16,11 @@ enum Command{
         input_string:String
     },
 
-    #[structopt(name = "felt_to_str")]
-    FeltToStr{
-        #[structopt(name= "INPUT_FELT")]
-        input_string:String
-    },
+    // #[structopt(name = "felt_to_string")]
+    // FeltToStr{
+    //     #[structopt(name= "INPUT_FELT")]
+    //     input_string:String
+    // },
 
 }
 /// Converts a string to a felt (short string).
@@ -52,12 +51,6 @@ fn str_to_felt(str: &str) -> Result<BigInt, &'static str> {
 }
 
 
-#[allow(dead_code)]
-fn felt_to_str(felt: &BigInt) -> String {
-    felt.to_str_radix(16)
-}
-
-
 fn main() {
 let command = Command::from_args();
 
@@ -68,10 +61,15 @@ let command = Command::from_args();
                 Err(error) => eprint!("Error: {}", error)
             }
         }
-        Command::FeltToStr { input_string } => {
-            let felt = BigInt::from_str(&input_string).unwrap();
-             println!("String representation: {}",felt)
-            
-        }
+        // Command::FeltToStr { input_string } => {
+        //     let input_strings: Vec<String> = input_string.split(',').map(|s| s.trim().to_string()).collect();
+        //     match strings_to_bigints(input_strings) {
+        //         Ok(bigints) => {
+        //             let result = felt_to_string(&bigints);
+        //             println!("String representation: {}", result);
+        //         }
+        //         Err(error) => eprint!("Error: {}", error),
+        //     }
+        // }
     }
 }
