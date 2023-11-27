@@ -16,11 +16,11 @@ enum Command{
         input_string:String
     },
 
-    // #[structopt(name = "felt_to_string")]
-    // FeltToStr{
-    //     #[structopt(name= "INPUT_FELT")]
-    //     input_string:String
-    // },
+    #[structopt(name = "felt_to_string")]
+    FeltToString{
+        #[structopt(name= "INPUT_FELT")]
+        input_string:Vec<BigInt>
+    },
 
 }
 /// Converts a string to a felt (short string).
@@ -51,6 +51,17 @@ fn str_to_felt(str: &str) -> Result<BigInt, &'static str> {
 }
 
 
+// felt_to_string
+fn felt_arr_to_str(felts: Vec<BigInt>) -> Result<String, &'static str> {
+    felts.into_iter().fold(Ok(String::new()), |memo, felt| {
+        memo.and_then(|acc| {
+            let hex_str = felt.to_str_radix(16);
+            let bytes = hex::decode(hex_str).map_err(|_| "Failed to decode hex string")?;
+            let utf8_str = String::from_utf8_lossy(&bytes).to_string();
+            Ok(acc + &utf8_str)
+        })
+    })
+}
 fn main() {
 let command = Command::from_args();
 
@@ -60,16 +71,12 @@ let command = Command::from_args();
                 Ok(result) => println!("Felt representation: {}", result),
                 Err(error) => eprint!("Error: {}", error)
             }
+        },
+        Command::FeltToString {input_string} =>{
+            match felt_arr_to_str(input_string){
+                Ok(result) => println!("Felt representation: {}", result),
+                Err(error) => eprint!("Error: {}", error)
+            }
         }
-        // Command::FeltToStr { input_string } => {
-        //     let input_strings: Vec<String> = input_string.split(',').map(|s| s.trim().to_string()).collect();
-        //     match strings_to_bigints(input_strings) {
-        //         Ok(bigints) => {
-        //             let result = felt_to_string(&bigints);
-        //             println!("String representation: {}", result);
-        //         }
-        //         Err(error) => eprint!("Error: {}", error),
-        //     }
-        // }
     }
 }
