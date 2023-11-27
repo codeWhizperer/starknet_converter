@@ -1,16 +1,9 @@
 use num_bigint::BigInt;
 use structopt::StructOpt;
 
-
-
-
-
-
-
-
 #[derive(StructOpt, Debug)]
 enum Command{
-    #[structopt(name = "str_to_felt")]
+    #[structopt(name = "string_to_felt")]
     StrToFelt{
         #[structopt(name= "INPUT_STRING")]
         input_string:String
